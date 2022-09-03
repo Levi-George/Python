@@ -6,19 +6,33 @@
 from email.message import EmailMessage
 import ssl
 import smtplib
-
+import re
 
 #Fill the sender, password, and receiver with appropriate values
-email_sender = ''
+email_sender = ""
 email_password = ""
 
-email_receiver = ''
+email_receiver = ""
 
 subject = "Test Email"
 body = """
 Hello, this is a test email from Levi, if you weren't supposed to get this then ignore it, duh.
-
 """
+
+while(not((re.search(re.escape("^*.@*..com$"), email_sender)))):
+    email_sender = input(f"Please enter a valid e-mail ")
+
+email_password = input(f"Enter your e-mail password")
+
+while(not(re.search(re.escape("*@*.com"), email_receiver))):
+    email_receiver = input(f"Please enter a valid e-mail for the receiver")
+
+subject = input(f"Enter the subject of your e-mail")
+
+body = input(f"Enter the message you would like to send")
+
+print(f"Thank you, please wait while we send the e-mail")
+
 
 em = EmailMessage()
 em['From'] = email_sender
