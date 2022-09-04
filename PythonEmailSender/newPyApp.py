@@ -16,7 +16,7 @@ email_receiver = ""
 
 subject = "Test Email"
 body = """
-Hello, this is a test email from Levi, if you weren't supposed to get this then ignore it, duh.
+Hello, this is a test email from Me, if you weren't supposed to get this then ignore it, duh.
 """
 
 email_regex = "^[A-Za-z0-9]*@[A-Za-z0-9]*\.com"
@@ -34,7 +34,6 @@ subject = input(f"Enter the subject of your e-mail")
 body = input(f"Enter the message you would like to send")
 
 print(f"Thank you, please wait while we send the e-mail")
-
 
 em = EmailMessage()
 em['From'] = email_sender
