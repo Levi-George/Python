@@ -26,7 +26,7 @@ while(((re.search(email_regex, email_sender))) == None):
 
 email_password = input(f"Enter your e-mail password")
 
-while(not(re.search(email_regex, email_receiver))):
+while(((re.search(email_regex, email_sender))) == None):
     email_receiver = input(f"Please enter a valid e-mail for the receiver")
 
 subject = input(f"Enter the subject of your e-mail")
