@@ -1,0 +1,3 @@
+Eloquence is optional
+Things which are optional indicate non-necessity
+non-necessity
