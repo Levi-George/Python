@@ -20,5 +20,5 @@ def divide(val1, val2):
 while(input != 5):
     input = input("Select your operation: \n1. Addition\n2. Subtraction\n3. Multiplication \n4. Divsion\n5. Quit")
 
-    while(input != 1 or input != 2 or input != 3 or input != 4 or input != 5)
-        
+    while(input != 1 or input != 2 or input != 3 or input != 4 or input != 5):
+        #Force user to input valid data
