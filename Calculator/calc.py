@@ -17,8 +17,8 @@ def divide(val1, val2):
 
 #main
 
-while(isintance(input, int)):
-    input = input("Enter a number")
+#Get inputs from user
+#Check to make sure inputs are valid
 
 while(input != 5):
     input = input("Select your operation: \n1. Addition\n2. Subtraction\n3. Multiplication \n4. Divsion\n5. Quit")
