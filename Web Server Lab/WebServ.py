@@ -1,30 +1,38 @@
 #import socket module
 
 from socket import *
+import platform
 import sys #termination of prog
 
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 #prepare server socket
+port = 6789
 
 #Start Here
-
+serverSocket.bind(('', port))
+serverSocket.listen(1)
 #End Here
 
 while True:
     #Establish Connection
     print('Ready to serve...')
 
-    connectionSocket, addr = ""#"Fill In"
+    connectionSocket, addr = serverSocket.accept()
 
     try:
-        message = "Fill In"
+        message = serverSocket.recv(2048).decode()
         filename = message.split()[1]
         f = open(filename[1:])
 
-        outputdata = "Fill In"
+        outputdata = f
 
-        #Send one HTTP header to socket
+        #Send one HTTP header line to socket
+
+        httpHeader = 'HTTP/1.0 200 OK\r\n'
+
+        connectionSocket.send(httpHeader.encode(), addr)
+
 
         #send content of the requested file to the client
         for i in range(0, len(outputdata)):
@@ -35,10 +43,12 @@ while True:
     except IOError:
         #Send 404 response
         #Fill In
+        httpHeader = 'HTTP/1.0 404 Page Not Found\r\n'
 
+        connectionSocket.send(httpHeader.encode(), addr)
+        
         #Close Socket
-        #Fill in
-        print("Does this appease the error")#Temp line, while figuring code out.
+        serverSocket.close()
 
     serverSocket.close()
 
