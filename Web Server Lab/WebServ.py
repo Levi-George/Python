@@ -4,6 +4,14 @@ from socket import *
 import platform
 import sys #termination of prog
 
+#send data to socket
+def sendOutputData(connectionSocket, outputdata): 
+
+    for i in range(0, len(outputdata)):
+        connectionSocket.send(outputdata[i].encode())
+        print(outputdata[i])
+    connectionSocket.send("\r\n".encode())
+
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 #prepare server socket
@@ -29,39 +37,26 @@ while True:
 
         #Send one HTTP header line to socket
 
-        httpHeader = 'HTTP/1.0 200 OK\r\n'
-
-        connectionSocket.send(httpHeader.encode('iso-8859-1'))
-
-        httpHeader = 'Content-Type: text/html\n\r\n'
-
-        connectionSocket.send(httpHeader.encode('iso-8859-1'))
+        httpHeader = """HTTP/1.0 200 OK
+                        Content-Type: text/html\n\r\n"""
+        connectionSocket.send(httpHeader.encode('utf-8'))
 
 
         #send content of the requested file to the client
-        for i in range(0, len(outputdata)):
-            connectionSocket.send(outputdata[i].encode())
-            print(outputdata[i])
-        connectionSocket.send("\r\n".encode())
+        sendOutputData(connectionSocket, outputdata)
 
         connectionSocket.close()
     except IOError:
     #   Send 404 response
-    #   Fill In
         
         outputdata = open("Hello404.html", 'r').read()
 
-        httpHeader = "HTTP/1.1 404 Page Not Found\r\n"
-        connectionSocket.send(httpHeader.encode('iso-8859-1'))
+        httpHeader = """HTTP/1.0 404 Page Not Found
+                        Content-Type: text/html\n\r\n"""
+        connectionSocket.send(httpHeader.encode('utf-8'))
 
-        httpHeader = 'Content-Type: text/html\n\r\n'
-        connectionSocket.send(httpHeader.encode('iso-8859-1'))
-
-        for i in range(0, len(outputdata)):
-            connectionSocket.send(outputdata[i].encode())
-        connectionSocket.send("\r\n".encode())
-
-        print(httpHeader)
+        #send content of the requested file to the client
+        sendOutputData(connectionSocket, outputdata)
 
         #Close Socket
         serverSocket.close()
