@@ -1,65 +1,89 @@
-#import socket module
+#Name: LG
+#Date: 10-29-22
+#Purpose: Basic web server
 
 from socket import *
-import platform
 import sys #termination of prog
 
-#send data to socket
-def sendOutputData(connectionSocket, outputdata): 
+#responses the server may send
+ServerResp = {  "200": """HTTP/1.0 200 OK
+                    Content-Type: text/html\n\r\n""",
+                "404": """HTTP/1.0 404 FILE NOT FOUND
+                    Content-Type: text/html\n\r\n"""                    
+            }
+
+#names of files to be used
+ResponseFiles = {
+                "200": """DO NOT USE, If our response was successful we don't need to send this""",
+                "404": """Hello404.html"""
+}
+
+#takes file and outputs each chunk through socket
+def sendConnectionData(outputdata):
 
     for i in range(0, len(outputdata)):
-        connectionSocket.send(outputdata[i].encode())
-        print(outputdata[i])
+            connectionSocket.send(outputdata[i].encode())
+            #print(outputdata[i]) #debug code
     connectionSocket.send("\r\n".encode())
 
+#get and print server response
+def sendHTTP_Resp(Code):
+
+    httpHeader = ServerResp[Code]
+    connectionSocket.send(httpHeader.encode('iso-8859-1'))
+
+#MAIN
 serverSocket = socket(AF_INET, SOCK_STREAM)
 
 #prepare server socket
 port = 6789
 
-#Start Here
+#Bind and listen to the port
 serverSocket.bind(('', port))
 serverSocket.listen(1)
-#End Here
+
 
 while True:
     #Establish Connection
     print('Ready to serve...')
 
+    #accept socket connection
     connectionSocket, addr = serverSocket.accept()
 
     try:
+        #get data from connection
         message = connectionSocket.recv(1024).decode() #you had the server socket set to receive
+        
+        #open file using message sent
         filename = message.split()[1]
         f = open(filename[1:], 'r')
 
-        outputdata = f.read() #you need to set the file to read
+        #output file to be read
+        outputdata = f.read()
 
-        #Send one HTTP header line to socket
-
-        httpHeader = """HTTP/1.0 200 OK
-                        Content-Type: text/html\n\r\n"""
-        connectionSocket.send(httpHeader.encode('utf-8'))
-
+        #header text and delivery
+        sendHTTP_Resp("200")
 
         #send content of the requested file to the client
-        sendOutputData(connectionSocket, outputdata)
+        sendConnectionData(outputdata)
 
+        #close socket after message has been sent in entirety
         connectionSocket.close()
+        
     except IOError:
     #   Send 404 response
         
-        outputdata = open("Hello404.html", 'r').read()
+        #get error response file and send it
+        outputdata = open(ResponseFiles['404'], 'r').read()
 
-        httpHeader = """HTTP/1.0 404 Page Not Found
-                        Content-Type: text/html\n\r\n"""
-        connectionSocket.send(httpHeader.encode('utf-8'))
+        #header text and delivery of 404 message
+        sendHTTP_Resp("404")  
 
-        #send content of the requested file to the client
-        sendOutputData(connectionSocket, outputdata)
+        #send content of file to the client
+        sendConnectionData(outputdata)
 
         #Close Socket
-        serverSocket.close()
+        connectionSocket.close()
 
     serverSocket.close()
 
