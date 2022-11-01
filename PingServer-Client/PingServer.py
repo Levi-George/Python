@@ -19,5 +19,8 @@ while True:
 # If rand is less is than 4, we consider the packet lost and do not respond
     if rand < 4:
         continue
+        #print("Packet Lost :[")
+        
+
 # Otherwise, the server responds
     serverSocket.sendto(message, address)
