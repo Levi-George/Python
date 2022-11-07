@@ -23,7 +23,11 @@ while(True):
 
     #only print an actual message
     if(msg):
+        #round trip time calculator
         roundTripTime = default_timer() - start
+        roundTripTime = roundTripTime * 1000
+
+        #print response
         print(msg, str(roundTripTime), sep="::")   
 
     #Limit amount of packets being sent
