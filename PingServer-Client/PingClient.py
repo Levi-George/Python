@@ -18,8 +18,15 @@ while(True):
     #send message
     sendSocket.send("Hello".encode('utf-8'))
     
-    #receive message from socket
-    msg = sendSocket.recv(1024).decode("utf-8")
+    #receive message from socket, if not, close code
+    try:
+        msg = sendSocket.recv(1024).decode("utf-8")
+
+    except ConnectionResetError:
+        print("The connection has been aborted")
+        print("Exiting program.....")
+        exit()
+
 
     #only print an actual message
     if(msg):
