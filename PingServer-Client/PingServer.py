@@ -17,9 +17,12 @@ while True:
     message = message.upper()
     print(message, end="\n")
 # If rand is less is than 4, we consider the packet lost and do not respond
+#   if this code runs, it will stop the entire setup, both the client and server will stop sending/receiving packets
     if rand < 4:
-        continue
-        #print("Packet Lost :[")
+       msg = "Packet Lost :["
+       print(msg)
+       serverSocket.sendto(msg.encode('utf-8'), address)
+       continue
         
 
 # Otherwise, the server responds
